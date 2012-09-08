@@ -1,0 +1,37 @@
+#!/usr/bin/env python2
+
+import check
+import os
+import difflib
+import re
+
+def edgews_normalize(*parts):
+    def filter(x):
+        x = [l.strip() for l in x]
+        return [l + '\n' for l in x if l != '']
+    return [filter(x) for x in parts]
+
+def diff_exact(a, b, output):
+    a, b = edgews_normalize(a, b)
+    if a != b:
+            output.write("Diff in output:\n")
+            output.writelines(difflib.unified_diff(a, b))
+            return False
+    return True
+
+def diff_almost_exact(a, b, output):
+    a, b = edgews_normalize(a, b)
+    if a != b:
+            output.write("Diff in output:\n")
+            output.writelines(difflib.unified_diff(a, b))
+            return False
+    return True
+
+checks = {
+    "replacechar": { 'stdout': diff_exact },
+    "nl": { 'stdout': diff_almost_exact },
+    "exprs": { 'stdout': diff_almost_exact },
+    "sortnums": { 'stdout': diff_almost_exact }
+}
+
+check.check_all(checks)
