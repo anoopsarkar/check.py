@@ -394,13 +394,16 @@ def usage(progname, checks, check_defaults, check_dir):
         for name, check_fun in [("stdout", check['stdout']), ("stderr", check['stderr'])] + [format_file_check(fc) for fc in check['file_checks']]:
             print >> sys.stderr, "\t\t%s: %s" % (name, fun_name(check_fun))
 
-def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv):
+def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv, extra_ops=None):
     import getopt
 
     check_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
     try:
-        opts, args = getopt.getopt(argv[1:], "Bo:ds:")
+        opt_spec = "Bo:ds:"
+        if extra_ops is not None:
+            opt_spec += extra_ops[0]
+        opts, args = getopt.getopt(argv[1:], opt_spec)
         do_backups = True
         output_path = None
         diff_output = None
@@ -415,6 +418,8 @@ def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv):
             elif opt == "-s":
                 with open(value) as file:
                     skip = set(tuple(line.split()) for line in file)
+        if extra_ops is not None:
+            extra_ops[1](opts)
         if len(args) < 2:
             raise getopt.GetoptError("Not enough arguments.")
     except getopt.GetoptError, e:
