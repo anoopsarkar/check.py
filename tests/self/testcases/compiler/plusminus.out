@@ -1,0 +1,37 @@
+long 1 : failed : LOG/long/1.run.out (final output from compiled program)
+long 2 : failed : LOG/long/2.run.out (final output from compiled program)
+long 3 : passed
+long 4 : passed
+noarith printundef1 : passed
+noarith printundef2 : passed
+noarith printundef2same : passed
+noarith read1 : passed
+noarith read2 : passed
+noarith read2same : passed
+noarith read3 : passed
+noarith read3same : passed
+noarith readprint1 : passed
+noarith readprint2 : passed
+noarith readprint2same : passed
+noarith readprint3 : passed
+noarith readprint3same : passed
+noarith readprintreadprint2 : passed
+noarith readprintreadprint2same : passed
+noarith readprintreadprint3 : passed
+noarith readprintreadprint3same : passed
+singleop div : passed
+singleop minus : failed : LOG/singleop/minus.run.out (final output from compiled program)
+singleop missingargbinop : passed
+singleop missingarguniop : passed
+singleop mod : passed
+singleop mult : passed
+singleop neg : passed
+singleop plus : failed : LOG/singleop/plus.run.out (final output from compiled program)
+singleop undefvarbinop : passed
+singleop undefvaruniop : passed
+singleop unknownbinop : passed
+singleop unknownuniop : passed
+singleop : 10 / 12
+noarith : 17 / 17
+long : 2 / 4
+total : 29 / 33

@@ -1,0 +1,25 @@
+exprs div : passed
+exprs minus : passed
+exprs mod : passed
+exprs mult : passed
+exprs multi : passed
+exprs plus : passed
+exprs toomanytokens : passed
+exprs unknownop : passed
+nl 1 : passed
+nl 2 : passed
+nl 3 : passed
+nl 4 : passed
+replacechar 1 : passed
+replacechar 2 : passed
+replacechar 3 : passed
+sortnums 1 : passed
+sortnums 2 : passed
+sortnums 3 : passed
+sortnums 4 : passed
+sortnums 5 : passed
+exprs : 8 / 8
+sortnums : 5 / 5
+nl : 4 / 4
+replacechar : 3 / 3
+total : 20 / 20

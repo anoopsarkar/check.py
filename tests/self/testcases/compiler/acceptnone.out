@@ -1,0 +1,37 @@
+long 1 : failed : LOG/long/1.llvm.ret (code generation exit status), LOG/long/1.run.out (final output from compiled program)
+long 2 : failed : LOG/long/2.llvm.ret (code generation exit status), LOG/long/2.run.out (final output from compiled program)
+long 3 : passed
+long 4 : passed
+noarith printundef1 : passed
+noarith printundef2 : passed
+noarith printundef2same : passed
+noarith read1 : failed : LOG/noarith/read1.llvm.ret (code generation exit status)
+noarith read2 : failed : LOG/noarith/read2.llvm.ret (code generation exit status)
+noarith read2same : failed : LOG/noarith/read2same.llvm.ret (code generation exit status)
+noarith read3 : failed : LOG/noarith/read3.llvm.ret (code generation exit status)
+noarith read3same : failed : LOG/noarith/read3same.llvm.ret (code generation exit status)
+noarith readprint1 : failed : LOG/noarith/readprint1.llvm.ret (code generation exit status), LOG/noarith/readprint1.run.out (final output from compiled program)
+noarith readprint2 : failed : LOG/noarith/readprint2.llvm.ret (code generation exit status), LOG/noarith/readprint2.run.out (final output from compiled program)
+noarith readprint2same : failed : LOG/noarith/readprint2same.llvm.ret (code generation exit status), LOG/noarith/readprint2same.run.out (final output from compiled program)
+noarith readprint3 : failed : LOG/noarith/readprint3.llvm.ret (code generation exit status), LOG/noarith/readprint3.run.out (final output from compiled program)
+noarith readprint3same : failed : LOG/noarith/readprint3same.llvm.ret (code generation exit status), LOG/noarith/readprint3same.run.out (final output from compiled program)
+noarith readprintreadprint2 : failed : LOG/noarith/readprintreadprint2.llvm.ret (code generation exit status), LOG/noarith/readprintreadprint2.run.out (final output from compiled program)
+noarith readprintreadprint2same : failed : LOG/noarith/readprintreadprint2same.llvm.ret (code generation exit status), LOG/noarith/readprintreadprint2same.run.out (final output from compiled program)
+noarith readprintreadprint3 : failed : LOG/noarith/readprintreadprint3.llvm.ret (code generation exit status), LOG/noarith/readprintreadprint3.run.out (final output from compiled program)
+noarith readprintreadprint3same : failed : LOG/noarith/readprintreadprint3same.llvm.ret (code generation exit status), LOG/noarith/readprintreadprint3same.run.out (final output from compiled program)
+singleop div : failed : LOG/singleop/div.llvm.ret (code generation exit status), LOG/singleop/div.run.out (final output from compiled program)
+singleop minus : failed : LOG/singleop/minus.llvm.ret (code generation exit status), LOG/singleop/minus.run.out (final output from compiled program)
+singleop missingargbinop : passed
+singleop missingarguniop : passed
+singleop mod : failed : LOG/singleop/mod.llvm.ret (code generation exit status), LOG/singleop/mod.run.out (final output from compiled program)
+singleop mult : failed : LOG/singleop/mult.llvm.ret (code generation exit status), LOG/singleop/mult.run.out (final output from compiled program)
+singleop neg : failed : LOG/singleop/neg.llvm.ret (code generation exit status), LOG/singleop/neg.run.out (final output from compiled program)
+singleop plus : failed : LOG/singleop/plus.llvm.ret (code generation exit status), LOG/singleop/plus.run.out (final output from compiled program)
+singleop undefvarbinop : passed
+singleop undefvaruniop : passed
+singleop unknownbinop : passed
+singleop unknownuniop : passed
+singleop : 6 / 12
+noarith : 3 / 17
+long : 2 / 4
+total : 11 / 33

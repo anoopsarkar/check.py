@@ -1,0 +1,57 @@
+#!/usr/bin/env python2
+
+import sys
+import check
+import os
+import difflib
+import re
+
+subchecks_dir = "."
+
+def get_sub_log_dir(**args):
+    return os.path.join(args['log_dir'], args['group'], args['testcase'] + ".logs")
+
+def diff_normedpaths(**args):
+    sub_log_dir = get_sub_log_dir(**args)
+    def norm(lines):
+        return [l.replace(sub_log_dir, 'LOG') for l in lines]
+    def diff(a, b, output):
+        a, b = (norm(x) for x in [a, b])
+        if a != b:
+                output.write("Diff in output with normalized paths:\n")
+                output.writelines(difflib.unified_diff(a, b))
+                return False
+        return True
+    return diff
+
+def command_subcheck(**args):
+    subcheck_run = os.path.join(args['check_dir'], "subcheck-run")
+    subcheck_dir = os.path.join(subchecks_dir, args['group'])
+    return [sys.executable, subcheck_run, get_sub_log_dir(**args), subcheck_dir, "check-%s" % (args['group']), "testcases"]
+
+def sources_subcheck(**args):
+    subcheck_dir = os.path.join(subchecks_dir, args['group'])
+    return ["check.py", subchecks_dir]
+
+def check_defaults(**args):
+    return {
+        'command': command_subcheck,
+        'source_files': sources_subcheck,
+        'stdout': diff_normedpaths(**args),
+        'stderr': diff_normedpaths(**args),
+        'file_checks': []
+    }
+
+def handle_opts(opts):
+    global subchecks_dir
+    for opt, value in opts:
+        if opt == '-S':
+            subchecks_dir = os.path.abspath(value)
+
+checks = {
+    "python": {},
+    "c": {},
+    "compiler": {}
+}
+
+check.check_all(checks, check_defaults, extra_ops=("S:", handle_opts))

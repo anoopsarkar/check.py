@@ -1,0 +1,19 @@
+#!/usr/bin/env python2
+
+import sys
+import os
+import os.path
+import subprocess
+
+if len(sys.argv) != 6:
+  print >> sys.stderr, "usage: %s LOG-PATH SUBCHECK-PATH CHECK-PROG TESTCASES ANSWER"
+  sys.exit(1)
+log_path = sys.argv[1]
+subcheck_path = sys.argv[2]
+check_prog, testcases, answer = [os.path.join(subcheck_path, p) for p in sys.argv[3:6]]
+
+os.environ['PYTHONPATH'] = os.getcwd()
+prog = subprocess.Popen([sys.executable, check_prog, "-o", log_path, answer, testcases])
+prog.wait()
+if prog.returncode != 0:
+    sys.exit(1)

@@ -1,0 +1,8 @@
+build nl : passed
+nl 1 : failed : failure exit value, stdout
+nl 2 : passed
+nl 3 : passed
+nl 4 : passed
+nl : 3 / 4
+build : 1 / 1
+total : 4 / 5

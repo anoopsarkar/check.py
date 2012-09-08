@@ -1,0 +1,37 @@
+long 1 : passed
+long 2 : passed
+long 3 : failed : LOG/long/3.llvm.ret (code generation exit status)
+long 4 : failed : LOG/long/4.llvm.ret (code generation exit status)
+noarith printundef1 : failed : LOG/noarith/printundef1.llvm.ret (code generation exit status)
+noarith printundef2 : failed : LOG/noarith/printundef2.llvm.ret (code generation exit status)
+noarith printundef2same : failed : LOG/noarith/printundef2same.llvm.ret (code generation exit status)
+noarith read1 : passed
+noarith read2 : passed
+noarith read2same : passed
+noarith read3 : passed
+noarith read3same : passed
+noarith readprint1 : passed
+noarith readprint2 : passed
+noarith readprint2same : passed
+noarith readprint3 : passed
+noarith readprint3same : passed
+noarith readprintreadprint2 : passed
+noarith readprintreadprint2same : passed
+noarith readprintreadprint3 : passed
+noarith readprintreadprint3same : passed
+singleop div : passed
+singleop minus : passed
+singleop missingargbinop : failed : LOG/singleop/missingargbinop.llvm.ret (code generation exit status)
+singleop missingarguniop : failed : LOG/singleop/missingarguniop.llvm.ret (code generation exit status)
+singleop mod : passed
+singleop mult : passed
+singleop neg : passed
+singleop plus : passed
+singleop undefvarbinop : failed : LOG/singleop/undefvarbinop.llvm.ret (code generation exit status)
+singleop undefvaruniop : failed : LOG/singleop/undefvaruniop.llvm.ret (code generation exit status)
+singleop unknownbinop : failed : LOG/singleop/unknownbinop.llvm.ret (code generation exit status)
+singleop unknownuniop : failed : LOG/singleop/unknownuniop.llvm.ret (code generation exit status)
+singleop : 6 / 12
+noarith : 14 / 17
+long : 2 / 4
+total : 22 / 33

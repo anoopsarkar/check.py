@@ -1,0 +1,25 @@
+exprs div : failed : failure exit value, stdout
+exprs minus : passed
+exprs mod : passed
+exprs mult : passed
+exprs multi : failed : failure exit value, stdout
+exprs plus : failed : failure exit value, stdout
+exprs toomanytokens : passed
+exprs unknownop : passed
+nl 1 : failed : failure exit value, stdout
+nl 2 : passed
+nl 3 : passed
+nl 4 : passed
+replacechar 1 : passed
+replacechar 2 : failed : stdout
+replacechar 3 : failed : failure exit value, stdout
+sortnums 1 : passed
+sortnums 2 : passed
+sortnums 3 : passed
+sortnums 4 : passed
+sortnums 5 : failed : failure exit value, stdout
+exprs : 5 / 8
+sortnums : 4 / 5
+nl : 3 / 4
+replacechar : 1 / 3
+total : 13 / 20
