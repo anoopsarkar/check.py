@@ -1,5 +1,9 @@
 CHECKPYPATH=../../
 export PYTHONPATH=$(CHECKPYPATH)
+OUT=out
 
-test:
-	./check-self -d -o out -S ../ $(CHECKPYPATH) testcases/
+test: clean
+	./check-self -d -o $(OUT) -S ../ $(CHECKPYPATH) testcases/
+
+clean:
+	rm -rf $(OUT)

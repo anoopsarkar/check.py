@@ -1,4 +1,8 @@
 export PYTHONPATH=../../
+OUT=out
 
-test:
-	./check-compiler -d -o out answer/ testcases/
+test: clean
+	./check-compiler -d -o $(OUT) answer/ testcases/
+
+clean:
+	rm -rf $(OUT)

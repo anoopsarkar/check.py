@@ -1,5 +1,8 @@
 export PYTHONPATH=../../
+OUT=out
 
-test:
-	cd answer && make clean
-	./check-c -d -o out answer/ testcases/
+test: clean
+	./check-c -d -o $(OUT) answer/ testcases/
+
+clean:
+	rm -rf $(OUT)
