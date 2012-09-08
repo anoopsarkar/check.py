@@ -116,6 +116,7 @@ def expand_all(checks, check_defaults, group, testcase, testcases_path, log_dir,
     args = [group, testcase, testcases_path, log_dir, check_dir]
     checks = dict(checks)
     checks = expand(checks, *args)
+    check_defaults = expand(check_defaults, *args)
     for group, group_check in checks.items():
         group_check = merge_defaults(group_check, check_defaults)
         group_check = expand(group_check, *args)
