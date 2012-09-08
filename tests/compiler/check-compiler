@@ -1,0 +1,86 @@
+#!/usr/bin/env python2
+
+import check
+import os
+import os.path
+import difflib
+import re
+import sys
+
+codegen = "./codegen"
+source_extension = ".source"
+testcase_run = "testcase-run"
+stdlib = "stdlib.c"
+
+def testcase_prefix(testcases_path, group, testcase):
+    return os.path.join(testcases_path, group, testcase)
+
+def load_files(*paths):
+    files = [open(fn) for fn in paths]
+    try:
+        return [list(f) for f in files]
+    finally:
+        for file in files:
+            file.close()
+
+def command(**args):
+    source_file = testcase_prefix(args['testcases_path'], args['group'], (args['testcase'])) + source_extension
+    return [os.path.join(args['check_dir'], testcase_run), "-c", codegen, "-l", stdlib, source_file, args['log_dir'], args['group'], args['testcase']]
+
+def diff_exact(a, b, output):
+    if a != b:
+        output.write("Diff in output:\n")
+        output.writelines(difflib.unified_diff(a, b))
+        return False
+    return True
+
+def make_diff_exit_status(fail_fail_msg, fail_succeed_msg):
+    def diff(a, b, output):
+        try:
+            # Normalize to 0 or 1 rather than checking exact error codes
+            assert len(a) == 1
+            assert len(b) == 1
+            a, b = [0 if x == 0 else 1 for x in [int(y[0].strip()) for y in [a, b]]]
+        except:
+            output.write("Expected an exit status number but got something else.\n")
+            return False
+        if a != b:
+            if a == 0:
+                output.write("%s\n" % (fail_fail_msg))
+            else:
+                output.write("%s\n" % (fail_succeed_msg))
+            output.write("Diff in output:\n")
+            output.writelines(difflib.unified_diff([str(a)], [str(b)]))
+            return False
+        return True
+    return diff
+
+def gold_output_paths(suffix, **args):
+    gold_path = testcase_prefix(args['testcases_path'], args['group'], (args['testcase'])) + suffix
+    output_path = testcase_prefix(args['log_dir'], args['group'], (args['testcase'])) + suffix
+    return gold_path, output_path
+
+def make_file_check_llvm_err(**args):
+    gold_path, output_path = gold_output_paths(".llvm.ret", **args)
+    diff_exit_status = make_diff_exit_status("Testcase was expected to succeed but failed.", "Testcase was expected to fail but succeeded.")
+    return { 'gold': gold_path, 'output': output_path, 'check': diff_exit_status, 'load_lines': True, 'backup': False, 'gold_default': ['0'], 'name': "code generation exit status" }
+
+def make_file_check_run_out(**args):
+    gold_path, output_path = gold_output_paths(".run.out", **args)
+    return { 'gold': gold_path, 'output': output_path, 'check': diff_exact, 'load_lines': True, 'backup': False, 'gold_default': [], 'name': "final output from compiled program" }
+
+checks = {
+        "noarith": {},
+        "singleop": {},
+        "long": {}
+    }
+
+check_defaults = {
+        'command': command,
+        'source_files': [codegen],
+        'stdout': None,
+        'stderr': None,
+        'file_checks': [make_file_check_llvm_err, make_file_check_run_out]
+    } 
+
+check.check_all(checks, check_defaults)

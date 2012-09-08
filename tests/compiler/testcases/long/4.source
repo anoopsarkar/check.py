@@ -1,0 +1,11 @@
+read a
+read b
+set c a + b
+read d
+read e
+set f a * b
+set g c - f c
+set h - g
+read i
+set j h % i
+print j

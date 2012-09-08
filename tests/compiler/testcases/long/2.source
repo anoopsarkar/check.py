@@ -1,0 +1,5 @@
+read +
+set - - +
+read bar
+set @#!$ bar + -
+print @#!$

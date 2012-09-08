@@ -1,0 +1,14 @@
+This is a very simple compiler with LLVM, to demonstrate how to set up complex checks. In particular, interesting features are that:
+- the command differs for each testcase rather than only for each testcase group
+- the command outputs intermediate files which are then checked.
+
+The compiler is for a simple arithmetic expression language. A program consists of a series of statements, one on each line. A statement has one of the following forms, where tokens are separated by one or more whitespace characters:
+	read ID
+	print ID
+	set ID UNIOP ID
+	set ID ID BINOP ID
+ID is any identifier token, which can be any string that does not contain whitespace characters. UNIOP is any character in "-+*/%". BINOPT is any character in "-".
+
+"read ID" reads an integer from a line of standard input. "print ID" prints an integer to a line of standard output. "set ID UNIOP ID" does operation UNIOP on the second ID argument and sets the first ID argument to the result. "set ID ID BINOP ID" does operation BINOP on the second and third ID arguments, and sets the first ID argument to the result. Operations do what you probably expect them to do. ID tokens used as argument to operations must have been previously assigned to.
+
+The compiler from source code to LLVM code simply prints out text rather than using the LLVM libraries. The rest of the compiling process to produce a native executable is done with the LLVM tool programs.

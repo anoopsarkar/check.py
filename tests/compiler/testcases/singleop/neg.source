@@ -1,0 +1,4 @@
+read x
+set y - x
+print x
+print y

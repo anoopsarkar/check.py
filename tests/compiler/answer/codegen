@@ -1,0 +1,83 @@
+#!/usr/bin/env python2
+
+import sys
+
+class SyntaxError(Exception):
+	pass
+class SemanticError(Exception):
+	pass
+
+bin_ops = {
+	"+": "add",
+	"-": "sub",
+	"*": "mul",
+	"/": "sdiv",
+	"%": "srem"
+}
+uni_ops = {
+	"-": ("sub", 0)
+}
+
+print """
+declare i32 @read()
+declare void @print(i32)
+
+define i32 @main() {
+	entry:
+"""
+
+symbol_table = {}
+next_id = 0
+def assign(var):
+	global next_id
+	llvm_var = "%%%i" % (next_id)
+	print "\t; %s now %s" % (llvm_var, var)
+	symbol_table[var] = llvm_var
+	next_id += 1
+	return llvm_var
+def lookup(var):
+	if var not in symbol_table:
+		raise SemanticError()
+	llvm_var = symbol_table[var]
+	print "\t; %s is %s" % (llvm_var, var)
+	return llvm_var
+
+for line_num, line in enumerate(sys.stdin, 1):
+	print "\t; LINE %i: %s" % (line_num, line.strip("\n"))
+	tokens = line.split()
+	if len(tokens) < 2:
+	  raise SyntaxError()
+	instr = tokens[0]
+	var = tokens[1]
+	if instr == 'read':
+		llvm_var = assign(var)
+		print "\t%s = call i32 @read()" % (llvm_var)
+	elif instr == 'set':
+		llvm_var = assign(var)
+		if len(tokens) == 4:
+			op = tokens[2]
+			arg = tokens[3]
+			if op not in uni_ops:
+				raise SyntaxError()
+			llvm_op, llvm_arg1 = uni_ops[op]
+			llvm_arg2 = lookup(arg)
+			print "\t%s = %s i32 %s, %s" % (llvm_var, llvm_op, llvm_arg1, llvm_arg2)
+		elif len(tokens) == 5:
+			arg1 = tokens[2]
+			op = tokens[3]
+			arg2 = tokens[4]
+			if op not in bin_ops:
+				raise SyntaxError()
+			llvm_op = bin_ops[op]
+			llvm_arg1, llvm_arg2 = [lookup(a) for a in [arg1, arg2]]
+			print "\t%s = %s i32 %s, %s" % (llvm_var, llvm_op, llvm_arg1, llvm_arg2)
+		else:
+			raise SyntaxError()
+	elif instr == 'print':
+		llvm_var = lookup(var)
+  		print "\tcall void @print(i32 %s)" % (llvm_var)
+
+print """
+	ret i32 0
+}
+"""
