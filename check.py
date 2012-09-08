@@ -61,9 +61,10 @@ Testcases
 Each TESTCASE-DIR/GROUP/TC directory contains the following types of files. Here
 TC is the name of a testcase in group GROUP.
 
-TC.file : contains filename used as input to the command for GROUP
+TC.file : contains filename used as standard input (stdin) to the command for
+          GROUP
 TC.in   : input sent to standard input (stdin) to the command
-            TC.file and TC.in should not simultaneously exist.
+          TC.file and TC.in should not simultaneously exist.
 TC.cmd  : the command line argument to the command, parsed as if on the shell
 TC.out  : expected output printed by program.py to standard output (stdout)
 TC.err  : expected output printed by program.py to standard error (stderr)
