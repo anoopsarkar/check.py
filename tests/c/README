@@ -1,0 +1,1 @@
+This is a simple C check demo showing how to integrate a build step into a check command. It also shows how to add a testcase which only checks the build, which may or may not be desirable.

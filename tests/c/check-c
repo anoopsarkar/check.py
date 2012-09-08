@@ -1,0 +1,45 @@
+#!/usr/bin/env python2
+
+import check
+import os
+import difflib
+import re
+
+def edgews_normalize(*parts):
+    def filter(x):
+        x = [l.strip() for l in x]
+        return [l + '\n' for l in x if l != '']
+    return [filter(x) for x in parts]
+
+def diff_almost_exact(a, b, output):
+    a, b = edgews_normalize(a, b)
+    if a != b:
+            output.write("Diff in output:\n")
+            output.writelines(difflib.unified_diff(a, b))
+            return False
+    return True
+
+def command_make(**args):
+    return ["make", "nl"]
+
+def command_make_and_run(**args):
+    return [os.path.join(args['check_dir'], "make-and-run"), "nl"]
+
+checks = {
+    "build": {
+        "command": command_make,
+        "source_files": ["nl.c"],
+        "stdout": None,
+        "stderr": None,
+        "file_checks": []
+    },
+    "nl": {
+        "command": command_make_and_run,
+        "source_files": ["nl.c"],
+        "stdout": diff_almost_exact,
+        "stderr": None,
+        "file_checks": []
+    }
+}
+
+check.check_all(checks, {})
