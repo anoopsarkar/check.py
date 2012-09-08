@@ -1,4 +1,7 @@
 #!/usr/bin/env python2
+"""
+Here each group tests single python program which must be named with the group name plus a .py suffix. These programs are executed with the same python interpreter used to run the check program.
+"""
 
 import check
 import os
@@ -34,4 +37,4 @@ checks = {
     "sortnums": { 'stdout': diff_almost_exact }
 }
 
-check.check_all(checks)
+check.check_all(checks, extra_usage=__doc__.rstrip('\n\r'))

@@ -1,4 +1,11 @@
 #!/usr/bin/env python2
+"""
+	-S DIR	path containing the sub-check directories
+
+Here each testcase group tests one of the other test examples (a sub-check). The extra option is to give the path to the directory containing them so that they don't have to go inside the testcases directory for this meta-check.
+
+Checks are done against the standard output and standard error of each sub-check program run without -d. The log output path (log_dir internally) is normalized to "LOG/" in all output before comparisons.
+"""
 
 import sys
 import check
@@ -54,4 +61,4 @@ checks = {
     "compiler": {}
 }
 
-check.check_all(checks, check_defaults, extra_ops=("S:", handle_opts))
+check.check_all(checks, check_defaults, extra_ops=("S:", handle_opts), extra_usage=__doc__.strip('\n\r'))

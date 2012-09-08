@@ -1,4 +1,7 @@
 #!/usr/bin/env python2
+"""
+Here each of the main testcase groups tests a single C program which must be given as source file named as the group name plus a .c suffix. There must be a makefile such that "make GROUP" will build the executable ./GROUP for group GROUP from source GROUP.c. The main testcase groups run make to do the build before running the resulting program. An extra "build" group runs the make step for all programs but does not run them.
+"""
 
 import check
 import os
@@ -42,4 +45,4 @@ checks = {
     }
 }
 
-check.check_all(checks, {})
+check.check_all(checks, {}, extra_usage=__doc__.rstrip('\n\r'))

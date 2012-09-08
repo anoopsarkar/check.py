@@ -1,87 +1,14 @@
 """
-usage: %s [-B] [-o DIR] [-d] ANSWER-DIR TESTCASE-DIR [...]
+usage: %s [options] ANSWER-DIR TESTCASE-DIR [...]
+
+ANSWER-DIR      Directory where your answer source files are stored.
+TESTCASE-DIR    Directory with testcases to be checked.
 
 Options:
-
--B      Disable backups of existing extra files produced by during checking. If
-        set then the existing files will be overwritten without confirmation.
-
--o DIR  Save the output from the testcases to DIR. Will overwrite existing files
-        in DIR. Useful for debugging your code. DIR will always contain the
-        output and exit status of the processes executed during checks. It may
-        also contain extra intermediate files.
-
--d      Show a comparison of outputs in a diff-like format for each failed
-        testcase. For testcases where output is not matched exactly, the diff
-        will show a comparison where the output and expected output are in a
-        normalized form. Read the diff functions (listed at the end of the usage
-        output) if the diff is not clear.
-
--s FILE Skip all testcases indicated by FILE. Each line in FILE is either a
-        group name, in which case all testcases for that group will be skipped;
-        or a group name and a testcase name, in which case the specific
-        testcase will be skipped for that group.
-
-ANSWER-DIR      Directory where your answer source files are stored
-TESTCASE-DIR    Directory with testcases to be checked
-
-About
-=====
-
-check.py is a library and base script for checking programs against a testcases.
-It was developed by Max Whitney (mwhitney@cs.sfu.ca) and Anoop Sarkar
-(anoop@cs.sfu.ca) for the latter's CMPT 413 and CMPT 379 courses at Simon
-Fraser University.
-
-Concrete test programs extend check.py by specifying checks on testcase groups.
-Each group named GROUP corresponds to a directory TESTCASE-DIR/GROUPNAME
-containing testcase files. See below for the format of testcases. Each group
-uses some source files in the answer directory which will be executed with some
-command, with inputs and expected outputs from the testcases.
-
-In the default setup each group has a single source file which is the group name
-plus a .py suffix. It is executed with the same python interpreter used to run
-the check program.
-
-All checks are run with ANSWER-DIR as the current directory. Any files created
-without an explicit path by your programs will be saved to ANSWER-DIR.
-
-If a program being checked succeeds then it should exit with zero status
-(sys.exit(0) or reaching the end of the program). If it fails (eg due to invalid
-input) then it should exit with non-zero status (eg sys.exit(1)). Testcases with
-a TC.fail file (see below) are expected to fail.
-
-Note that if exact match checks are used, then spacing, correct newlines, etc.
-matter. If you are convinced that your program outputs are right but are not
-being passed, then check these issues before reporting bugs.
-
-Testcases
-=========
-
-Each TESTCASE-DIR/GROUP/TC directory contains the following types of files. Here
-TC is the name of a testcase in group GROUP.
-
-TC.file : contains filename used as standard input (stdin) to the command for
-          GROUP
-TC.in   : input sent to standard input (stdin) to the command
-          TC.file and TC.in should not simultaneously exist.
-TC.cmd  : the command line argument to the command, parsed as if on the shell
-TC.out  : expected output printed by program.py to standard output (stdout)
-TC.err  : expected output printed by program.py to standard error (stderr)
-TC.fail : indicates that program.py should fail
-
-For example, if the command for group foo is "python foo.py" and we have
-    foo/bar.in: 123
-    foo/bar.cmd: -n 10 -t "a b c"
-    foo/bar.out: 321
-then testcase bar in group foo will be executed as in the following shell
-command:
-    python foo.py -n 10 -t "a b c" < foo.py
-and its standard output will be check against the string "321".
-
-API
-===
-TODO
+	-B	Disable backups of existing extra files produced by during checking. If set then the existing files will be overwritten without confirmation.
+	-o DIR	Save the output from the testcases to DIR. Will overwrite existing files in DIR. Useful for debugging your code. DIR will always contain the output and exit status of the processes executed during checks. It may also contain extra intermediate files.
+	-d	Show a comparison of outputs in a diff-like format for each failed testcase. For testcases where output is not matched exactly, the diff will show a comparison where the output and expected output are in a normalized form. Read the diff functions (listed at the end of the usage output) if the diff is not clear.
+	-s FILE	Skip all testcases indicated by FILE. Each line in FILE is either a group name, in which case all testcases for that group will be skipped; or a group name and a testcase name, in which case the specific testcase will be skipped for that group.
 """
 
 import sys
@@ -375,13 +302,14 @@ def default_check_defaults():
           }
     return check_defaults
 
-def usage(progname, checks, check_defaults, check_dir):
+def usage(progname, checks, check_defaults, check_dir, extra=None):
     checks = expand_all(checks, check_defaults, "GROUP", "TESTCASE", "TESTCASE-PATH", "OUTPUT-PATH", check_dir)
     pp = pprint.PrettyPrinter(indent=4)
-    print >> sys.stderr, __doc__ % (progname)
-    print >> sys.stderr, "Testcase groups and checks in use"
-    print >> sys.stderr, "================================="
+    print >> sys.stderr, __doc__.strip('\n\r') % (progname)
+    if extra is not None:
+        print >> sys.stderr, extra
     print >> sys.stderr
+    print >> sys.stderr, "Testcase groups and checks in use:"
     def fun_name(function):
         return function.__name__ if function is not None else "None"
     def format_file_check(file_check):
@@ -394,7 +322,7 @@ def usage(progname, checks, check_defaults, check_dir):
         for name, check_fun in [("stdout", check['stdout']), ("stderr", check['stderr'])] + [format_file_check(fc) for fc in check['file_checks']]:
             print >> sys.stderr, "\t\t%s: %s" % (name, fun_name(check_fun))
 
-def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv, extra_ops=None):
+def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv, extra_ops=None, extra_usage=None):
     import getopt
 
     check_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -423,7 +351,7 @@ def check_all(checks, check_defaults=default_check_defaults(), argv=sys.argv, ex
         if len(args) < 2:
             raise getopt.GetoptError("Not enough arguments.")
     except getopt.GetoptError, e:
-        usage(sys.argv[0], checks, check_defaults, check_dir)
+        usage(sys.argv[0], checks, check_defaults, check_dir, extra=extra_usage)
         sys.exit(1)
 
     answer_dir = args[0]

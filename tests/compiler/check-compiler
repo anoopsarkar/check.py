@@ -1,4 +1,22 @@
 #!/usr/bin/env python2
+"""
+Here the testcase groups are arbitrary. Each testcase is run by calling the expected compiler program to convert source code to LLVM code, then doing the complete compiling process to produce a native executable, and finally running the native executable.
+
+The source code for testcase TC should be in a file called TC%s. The standard input to the native executable is from TC.in. The compiling process generates many intermediate result files which are named TC.STAGE*, where stage is one of the following:
+	llvm	source code to LLVM code generation (the compiler being checked)
+	bc	assembly to LLVM bitcode
+	s	bitcode to native code
+	exec	linking to make native executable
+	run	running the final executable.
+The specific TC.STAGE* files are:
+	TC.STAGE	main result from STAGE
+	TC.STAGE.out	standard output from STAGE
+	TC.STATE.err	standard error from STAGE
+	TC.STAGE.ret	exist status from STAGE
+These intermediate files go in the -o output path if it is given. TC.llvm.ret and TC.run.out are checked against the corresponding files from the testcase.
+
+The TC.{out,err,ret} files represent the compiling process as a whole, and are not checked. The compiling process is always considered to succeed unless there is an internal error, even if the code generation stage fails (ie TC.llvm.ret may contain a non-zero number, but TC.ret will contain zero).
+"""
 
 import check
 import os
@@ -83,4 +101,4 @@ check_defaults = {
         'file_checks': [make_file_check_llvm_err, make_file_check_run_out]
     } 
 
-check.check_all(checks, check_defaults)
+check.check_all(checks, check_defaults, extra_usage=__doc__.rstrip('\n\r') % (source_extension))

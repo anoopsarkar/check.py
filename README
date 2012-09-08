@@ -1,0 +1,40 @@
+About
+=====
+
+check.py is a library and base script for checking programs against testcases. It was developed by Max Whitney (mwhitney@cs.sfu.ca) and Anoop Sarkar (anoop@cs.sfu.ca) for the latter's CMPT 413 and CMPT 379 courses at the School of Computing Science, Simon Fraser University.
+
+Description
+===========
+
+Concrete test programs extend check.py by specifying checks on testcase groups. Each group named GROUP corresponds to a directory TESTCASE-DIR/GROUPNAME containing testcase files. See below for the format of testcases. Each group uses some source files in the answer directory which will be executed with some command, with inputs and expected outputs from the testcases.
+
+In the default setup each group has a single source file which is the group name plus a .py suffix. It is executed with the same python interpreter used to run the check program.
+
+All checks are run with ANSWER-DIR as the current directory. If a program being checked succeeds then it should exit with zero status (sys.exit(0) or reaching the end of the program). If it fails (eg due to invalid input) then it should exit with non-zero status (eg sys.exit(1)). Testcases with a TC.fail file (see below) are expected to fail.
+
+Testcases
+=========
+
+Each TESTCASE-DIR/GROUP/TC directory contains the following types of files. Here TC is the name of a testcase in group GROUP.
+
+TC.file : contains filename used as standard input (stdin) to the command for
+          GROUP
+TC.in   : input sent to standard input (stdin) to the command
+          TC.file and TC.in should not simultaneously exist.
+TC.cmd  : the command line argument to the command, parsed as if on the shell
+TC.out  : expected output printed by program.py to standard output (stdout)
+TC.err  : expected output printed by program.py to standard error (stderr)
+TC.fail : indicates that program.py should fail
+
+For example, if the command for group foo is "python foo.py" and we have
+    foo/bar.in: 123
+    foo/bar.cmd: -n 10 -t "a b c"
+    foo/bar.out: 321
+then testcase bar in group foo will be executed as in the following shell command:
+    python foo.py -n 10 -t "a b c" < foo.py
+Its standard output will be checked against the string "321".
+
+API
+===
+
+Until this section is written properly, please see the examples in the tests/ directory. They show how to set up a variety of testcases and checks.
