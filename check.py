@@ -19,6 +19,7 @@ import tempfile
 import subprocess
 import collections
 import shlex
+import pipes
 import pprint
 import operator
 
@@ -106,6 +107,10 @@ def run(argv, stdin_file=None, output_path=None):
         if prog.stdin != None:
             prog.stdin.close()
         return stdout_lines, stderr_lines, prog.returncode
+    except:
+        print >> sys.stderr, "error: something went wrong when trying to run the following command:"
+        print >> sys.stderr, " ".join(pipes.quote(a) for a in argv)
+        sys.exit(1)
     finally:
         if output_path is None:
             os.remove(stdout_path)
