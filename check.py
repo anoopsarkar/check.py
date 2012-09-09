@@ -210,7 +210,7 @@ def run_testcase(testcases_path, group, testcase, checks, check_defaults, log_di
         args = []
 
     if do_backups:
-        backup_files(".", *(fc['output'] for fc in file_checks if 'backup' not in fc or fc['backup']))
+        backup_files(os.getcwd(), *(fc['output'] for fc in file_checks if 'backup' not in fc or fc['backup']))
 
     input_file = None
     try:
@@ -231,7 +231,7 @@ def run_testcase(testcases_path, group, testcase, checks, check_defaults, log_di
             failed.append("stderr")
         for file_check in file_checks:
             gold_path = maybe_rel_path(file_check['gold'], testcases_path)
-            output_path = maybe_rel_path(file_check['output'], "./")
+            output_path = maybe_rel_path(file_check['output'], os.getcwd())
             if not check_file_output(gold_path, output_path, file_check['check'], diff_output, file_check.get('load_lines') or True, file_check.get('gold_default')):
                 msg = output_path
                 if 'name' in file_check:
