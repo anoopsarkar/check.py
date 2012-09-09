@@ -212,7 +212,12 @@ def run_testcase(testcases_path, group, testcase, checks, check_defaults, log_di
         if os.path.exists(input_path):
             input_file = open(input_path)
         print >> sys.stderr, "running", group, testcase
-        stdout, stderr, status = run(command + args, input_file, output_path=output_path)
+        try:
+            stdout, stderr, status = run(command + args, input_file, output_path=output_path)
+        except:
+            print >>sys.stderr, "something went wrong when trying to run the following command ..."
+            print >>sys.stderr, " ".join(command + args)
+            sys.exit(1)
         failed = []
         if os.path.exists(fail_path):
             if status == 0:
