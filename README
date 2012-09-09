@@ -1,7 +1,7 @@
 About
 =====
 
-check.py is a library and base script for checking programs against testcases. It was developed by Max Whitney (mwhitney@cs.sfu.ca) and Anoop Sarkar (anoop@cs.sfu.ca) for the latter's CMPT 413 and CMPT 379 courses at the School of Computing Science, Simon Fraser University.
+check.py is a library and base script for checking programs against testcases. It was developed by Max Whitney (mwhitney at cs.sfu.ca) and Anoop Sarkar (anoop at cs.sfu.ca) for the latter's CMPT 413 and CMPT 379 courses at the School of Computing Science, Simon Fraser University.
 
 Description
 ===========
