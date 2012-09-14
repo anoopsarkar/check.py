@@ -19,6 +19,7 @@ import tempfile
 import subprocess
 import collections
 import shlex
+import pipes
 import pprint
 import operator
 
@@ -106,6 +107,10 @@ def run(argv, stdin_file=None, output_path=None):
         if prog.stdin != None:
             prog.stdin.close()
         return stdout_lines, stderr_lines, prog.returncode
+    except:
+        print >> sys.stderr, "error: something went wrong when trying to run the following command:"
+        print >> sys.stderr, " ".join(pipes.quote(a) for a in argv)
+        sys.exit(1)
     finally:
         if output_path is None:
             os.remove(stdout_path)
@@ -205,19 +210,14 @@ def run_testcase(testcases_path, group, testcase, checks, check_defaults, log_di
         args = []
 
     if do_backups:
-        backup_files(".", *(fc['output'] for fc in file_checks if 'backup' not in fc or fc['backup']))
+        backup_files(os.getcwd(), *(fc['output'] for fc in file_checks if 'backup' not in fc or fc['backup']))
 
     input_file = None
     try:
         if os.path.exists(input_path):
             input_file = open(input_path)
         print >> sys.stderr, "running", group, testcase
-        try:
-            stdout, stderr, status = run(command + args, input_file, output_path=output_path)
-        except:
-            print >>sys.stderr, "something went wrong when trying to run the following command ..."
-            print >>sys.stderr, " ".join(command + args)
-            sys.exit(1)
+        stdout, stderr, status = run(command + args, input_file, output_path=output_path)
         failed = []
         if os.path.exists(fail_path):
             if status == 0:
