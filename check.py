@@ -61,6 +61,11 @@ def merge_defaults(options, defaults):
             options[key] = value
     return options
 
+def mkdirp(path):
+    try:
+        os.makedirs(path)
+    except os.error:
+        pass
 def maybe_rel_path(path, rel_to):
     if not os.path.isabs(path):
         path = os.path.join(rel_to, path)
@@ -73,8 +78,7 @@ def run(argv, stdin_file=None, output_path=None):
     """
     if output_path is not None:
         dir = os.path.dirname(output_path)
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        mkdirp(dir)
         stdout_path = "%s.out" % (output_path)
         stderr_path = "%s.err" % (output_path)
         stdout_file = open(stdout_path, 'w')
